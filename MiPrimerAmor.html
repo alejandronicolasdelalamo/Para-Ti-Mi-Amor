@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para el amor de mi vida ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #c2185b 0%, #880e4f 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Fondo con corazones flotantes */
+        .background-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-heart {
+            position: absolute;
+            opacity: 0.2;
+            animation: floatHeart 12s infinite ease-in-out;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background: #f5ebe0;
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 550px;
+            width: 90%;
+            min-height: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Botón de inicio */
+        .start-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .start-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .start-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .start-heart {
+            width: 60px;
+            height: 60px;
+            background: #c41e3a;
+            position: relative;
+            transform: rotate(-45deg);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .start-heart::before,
+        .start-heart::after {
+            content: "";
+            width: 60px;
+            height: 60px;
+            background: #c41e3a;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .start-heart::before {
+            left: -30px;
+        }
+
+        .start-heart::after {
+            top: -30px;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: rotate(-45deg) scale(1);
+            }
+            50% {
+                transform: rotate(-45deg) scale(1.15);
+            }
+        }
+
+        .start-text {
+            font-size: 24px;
+            color: #c41e3a;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        /* Contenido principal */
+        .content {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .content.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .title {
+            font-size: 20px;
+            color: #5a4a42;
+            margin-bottom: 15px;
+            font-weight: normal;
+            opacity: 0;
+        }
+
+        .title.show {
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        .message-top {
+            font-size: 15px;
+            color: #5a4a42;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            min-height: 65px;
+            opacity: 0;
+        }
+
+        .message-top.show {
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        .typing-text-top {
+            display: inline;
+        }
+
+        .tree-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .trunk {
+            width: 30px;
+            height: 0;
+            background: linear-gradient(to bottom, #8b6f47, #6b4423, #4a2f1a);
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 3px 3px;
+            clip-path: polygon(35% 0%, 65% 0%, 100% 100%, 0% 100%);
+        }
+
+        .trunk.grow {
+            animation: growTrunk 3s ease-out forwards;
+        }
+
+        @keyframes growTrunk {
+            0% {
+                height: 0;
+                width: 30px;
+            }
+            100% {
+                height: 90px;
+                width: 30px;
+            }
+        }
+
+        .heart-tree {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 210px;
+        }
+
+        .heart {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            transform: rotate(-45deg);
+            opacity: 0;
+            border-radius: 1px;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            left: -4px;
+        }
+
+        .heart::after {
+            top: -4px;
+        }
+
+        .heart.pop {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: rotate(-45deg) scale(0);
+            }
+            70% {
+                transform: rotate(-45deg) scale(1.4);
+            }
+            100% {
+                opacity: 1;
+                transform: rotate(-45deg) scale(1);
+            }
+        }
+
+        .falling-heart {
+            animation: fall 3.5s ease-in forwards, swing 1.8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes fall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) translateX(0) rotate(-45deg);
+            }
+            100% {
+                transform: translateY(320px) translateX(-40px) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes swing {
+            0%, 100% {
+                margin-left: -5px;
+            }
+            50% {
+                margin-left: 30px;
+            }
+        }
+
+        .counter {
+            font-size: 14px;
+            color: #5a4a42;
+            margin: 10px 0 0 0;
+            line-height: 1.5;
+            opacity: 0;
+        }
+
+        .counter.show {
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        .counter-time {
+            font-weight: normal;
+            display: block;
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #5a4a42;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: #5a4a42;
+            margin-left: 2px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-hearts" id="bgHearts"></div>
+    
+    <div class="container">
+        <!-- Botón de inicio -->
+        <div class="start-button" id="startButton">
+            <div class="start-heart"></div>
+            <div class="start-text">San Valentín</div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="content" id="mainContent">
+            <div class="title" id="title">Para el amor de mi vida:</div>
+            
+            <div class="message-top" id="messageTop">
+                <span class="typing-text-top" id="typingTextTop"></span>
+            </div>
+            
+            <div class="tree-container">
+                <div class="trunk" id="trunk"></div>
+                <div class="heart-tree" id="heartTree"></div>
+                <div class="ground"></div>
+            </div>
+
+            <div class="counter" id="counter">
+                Mi amor por ti comenzó hace...<br>
+                <span class="counter-time" id="timeCounter"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let animationStarted = false;
+
+        // Botón de inicio
+        document.getElementById('startButton').addEventListener('click', function() {
+            this.classList.add('hidden');
+            document.getElementById('mainContent').classList.add('visible');
+            
+            if (!animationStarted) {
+                animationStarted = true;
+                setTimeout(() => {
+                    startAllAnimations();
+                }, 500);
+            }
+        });
+
+        // Crear corazones de fondo
+        function createBackgroundHearts() {
+            const container = document.getElementById('bgHearts');
+            const colors = ['#ff1744', '#f06292', '#ec407a', '#e91e63', '#c2185b'];
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                heart.setAttribute('viewBox', '0 0 32 32');
+                heart.setAttribute('class', 'bg-heart');
+                heart.style.width = Math.random() * 80 + 40 + 'px';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 12 + 's';
+                heart.style.animationDuration = Math.random() * 8 + 8 + 's';
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', 'M16,28.261c0,0-14-7.926-14-17.046c0-9.356,13.159-10.399,14-0.454c1.011-9.938,14-8.903,14,0.454C30,20.335,16,28.261,16,28.261z');
+                path.setAttribute('fill', colors[Math.floor(Math.random() * colors.length)]);
+                
+                heart.appendChild(path);
+                container.appendChild(heart);
+            }
+        }
+
+        // Colores variados para los corazones
+        const heartColors = [
+            '#d32f2f', '#e53935', '#f44336', '#ef5350', '#e57373',
+            '#c62828', '#b71c1c', '#ff1744', '#ff5252', '#ff8a80',
+            '#d81b60', '#c2185b', '#ad1457', '#880e4f', '#e91e63',
+            '#f06292', '#f48fb1', '#ff4081', '#ff80ab', '#ec407a',
+            '#f50057', '#c51162', '#ff6b9d', '#ff8fab', '#ffa7c4'
+        ];
+
+        // Generar posiciones para formar un corazón denso y perfecto
+        function generateHeartPositions() {
+            const positions = [];
+            const centerX = 130;
+            const centerY = 120;
+            
+            // Generar corazones en forma de corazón matemático - TRIPLE DENSIDAD
+            for (let angle = 0; angle < Math.PI * 2; angle += 0.05) {
+                // Ecuación paramétrica de corazón
+                const t = angle;
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                
+                // Escalar y centrar
+                const scale = 5.5;
+                positions.push({
+                    x: centerX + x * scale,
+                    y: centerY + y * scale
+                });
+                
+                // Agregar mucha más densidad
+                positions.push({
+                    x: centerX + x * scale + (Math.random() - 0.5) * 6,
+                    y: centerY + y * scale + (Math.random() - 0.5) * 6
+                });
+                
+                positions.push({
+                    x: centerX + x * scale + (Math.random() - 0.5) * 10,
+                    y: centerY + y * scale + (Math.random() - 0.5) * 10
+                });
+            }
+            
+            // Rellenar COMPLETAMENTE el interior del corazón con grid muy denso
+            for (let y = -75; y < 90; y += 4) {
+                for (let x = -85; x < 85; x += 4) {
+                    const t = Math.atan2(-y, x);
+                    const hx = 16 * Math.pow(Math.sin(t), 3);
+                    const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    const scale = 5.5;
+                    const dist = Math.sqrt(Math.pow(x - hx * scale, 2) + Math.pow(y - hy * scale, 2));
+                    
+                    if (dist < 15) {
+                        positions.push({
+                            x: centerX + x,
+                            y: centerY + y
+                        });
+                        
+                        // Agregar puntos intermedios
+                        if (Math.random() > 0.4) {
+                            positions.push({
+                                x: centerX + x + (Math.random() - 0.5) * 3,
+                                y: centerY + y + (Math.random() - 0.5) * 3
+                            });
+                        }
+                    }
+                }
+            }
+            
+            // Capa adicional para eliminar cualquier espacio blanco
+            for (let y = -70; y < 85; y += 5) {
+                for (let x = -80; x < 80; x += 5) {
+                    const t = Math.atan2(-y, x);
+                    const hx = 16 * Math.pow(Math.sin(t), 3);
+                    const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    const scale = 5.5;
+                    const dist = Math.sqrt(Math.pow(x - hx * scale, 2) + Math.pow(y - hy * scale, 2));
+                    
+                    if (dist < 12) {
+                        positions.push({
+                            x: centerX + x + Math.random() * 2,
+                            y: centerY + y + Math.random() * 2
+                        });
+                    }
+                }
+            }
+            
+            return positions;
+        }
+
+        // Crear el árbol de corazones
+        function createHeartTree() {
+            const tree = document.getElementById('heartTree');
+            const hearts = [];
+            const positions = generateHeartPositions();
+
+            positions.forEach((pos, index) => {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart pop';
+                    const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+                    heart.style.left = pos.x + 'px';
+                    heart.style.top = pos.y + 'px';
+                    heart.style.background = color;
+                    
+                    const styleId = 'heart-style-' + index;
+                    const style = document.createElement('style');
+                    style.id = styleId;
+                    style.textContent = `
+                        .heart:nth-child(${index + 1})::before,
+                        .heart:nth-child(${index + 1})::after {
+                            background: ${color};
+                        }
+                    `;
+                    document.head.appendChild(style);
+                    
+                    tree.appendChild(heart);
+                    hearts.push({ element: heart, color: color, x: pos.x, y: pos.y });
+                }, 3000 + (index * 3));
+            });
+
+            // Hacer que los corazones caigan - MÁS FRECUENTE
+            setTimeout(() => {
+                setInterval(() => {
+                    if (hearts.length > 0) {
+                        // Hacer caer 2-3 corazones a la vez
+                        const numFalling = Math.floor(Math.random() * 2) + 2;
+                        
+                        for (let i = 0; i < numFalling; i++) {
+                            const randomIndex = Math.floor(Math.random() * hearts.length);
+                            const originalHeart = hearts[randomIndex];
+                            
+                            const fallingHeart = document.createElement('div');
+                            fallingHeart.className = 'heart falling-heart';
+                            fallingHeart.style.left = originalHeart.x + 'px';
+                            fallingHeart.style.top = originalHeart.y + 'px';
+                            fallingHeart.style.background = originalHeart.color;
+                            
+                            const styleId = 'falling-' + Date.now() + '-' + Math.random();
+                            const style = document.createElement('style');
+                            style.id = styleId;
+                            style.textContent = `
+                                .falling-heart::before,
+                                .falling-heart::after {
+                                    background: ${originalHeart.color};
+                                }
+                            `;
+                            document.head.appendChild(style);
+                            
+                            tree.appendChild(fallingHeart);
+                            
+                            setTimeout(() => {
+                                fallingHeart.remove();
+                                const styleEl = document.getElementById(styleId);
+                                if (styleEl) styleEl.remove();
+                            }, 3500);
+                        }
+                    }
+                }, 300);
+            }, 8000);
+        }
+
+        // Contador de tiempo
+        function updateCounter() {
+            const startDate = new Date('2025-09-01T00:00:00');
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('timeCounter').textContent = 
+                `${days} días ${hours} horas ${minutes} minutos ${seconds} segundos`;
+        }
+
+        // Efecto de escritura
+        function typeWriterTop() {
+            const text = "Si pudiera elegir un lugar seguro, sería a tu lado.\n\nCuanto más tiempo estoy contigo, más te amo.";
+            let index = 0;
+            const element = document.getElementById('typingTextTop');
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            
+            function type() {
+                if (index < text.length) {
+                    if (text.charAt(index) === '\n') {
+                        element.innerHTML += '<br>';
+                    } else {
+                        const currentText = element.textContent;
+                        element.textContent = currentText + text.charAt(index);
+                    }
+                    index++;
+                    setTimeout(type, 40);
+                } else {
+                    cursor.remove();
+                }
+            }
+            
+            element.appendChild(cursor);
+            setTimeout(type, 500);
+        }
+
+        // Iniciar todas las animaciones en orden
+        function startAllAnimations() {
+            // 1. Crecer el tronco
+            document.getElementById('trunk').classList.add('grow');
+            
+            // 2. Crear el árbol de corazones
+            setTimeout(() => {
+                createHeartTree();
+            }, 500);
+            
+            // 3. Mostrar título y mensaje después del árbol
+            setTimeout(() => {
+                document.getElementById('title').classList.add('show');
+                document.getElementById('messageTop').classList.add('show');
+                typeWriterTop();
+            }, 9000);
+            
+            // 4. Mostrar contador
+            setTimeout(() => {
+                document.getElementById('counter').classList.add('show');
+                updateCounter();
+                setInterval(updateCounter, 1000);
+            }, 10000);
+        }
+
+        // Inicializar
+        window.addEventListener('load', () => {
+            createBackgroundHearts();
+        });
+    </script>
+</body>
+</html>
