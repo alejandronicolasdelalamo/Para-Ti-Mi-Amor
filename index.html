@@ -71,15 +71,16 @@
             flex-direction: column;
         }
 
-        /* Botón de inicio */
+        /* Botón de inicio - HORIZONTAL con corazón de pie */
         .start-button {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             display: flex;
+            flex-direction: row;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             z-index: 10;
@@ -96,46 +97,109 @@
         }
 
         .start-heart {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             background: #c41e3a;
             position: relative;
-            transform: rotate(-45deg);
+            transform: rotate(45deg);
             animation: pulse 1.5s ease-in-out infinite;
         }
 
         .start-heart::before,
         .start-heart::after {
             content: "";
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             background: #c41e3a;
             border-radius: 50%;
             position: absolute;
         }
 
         .start-heart::before {
-            left: -30px;
+            left: -35px;
         }
 
         .start-heart::after {
-            top: -30px;
+            top: -35px;
         }
 
         @keyframes pulse {
             0%, 100% {
-                transform: rotate(-45deg) scale(1);
+                transform: rotate(45deg) scale(1);
             }
             50% {
-                transform: rotate(-45deg) scale(1.15);
+                transform: rotate(45deg) scale(1.15);
             }
         }
 
         .start-text {
-            font-size: 24px;
+            font-size: 28px;
             color: #c41e3a;
             font-weight: bold;
-            text-decoration: underline;
+            text-align: center;
+        }
+
+        /* Responsive para móviles */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                min-height: 450px;
+            }
+
+            /* En móvil, poner el botón en vertical */
+            .start-button {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .start-heart {
+                width: 60px;
+                height: 60px;
+            }
+
+            .start-heart::before,
+            .start-heart::after {
+                width: 60px;
+                height: 60px;
+            }
+
+            .start-heart::before {
+                left: -30px;
+            }
+
+            .start-heart::after {
+                top: -30px;
+            }
+
+            .start-text {
+                font-size: 24px;
+            }
+        }
+
+        /* Para pantallas muy pequeñas */
+        @media (max-width: 400px) {
+            .start-heart {
+                width: 50px;
+                height: 50px;
+            }
+
+            .start-heart::before,
+            .start-heart::after {
+                width: 50px;
+                height: 50px;
+            }
+
+            .start-heart::before {
+                left: -25px;
+            }
+
+            .start-heart::after {
+                top: -25px;
+            }
+
+            .start-text {
+                font-size: 22px;
+            }
         }
 
         /* Contenido principal */
@@ -159,7 +223,7 @@
         }
 
         .title.show {
-            animation: fadeIn 1s ease-in forwards;
+            animation: fadeIn 0.6s ease-in forwards;
         }
 
         .message-top {
@@ -172,7 +236,7 @@
         }
 
         .message-top.show {
-            animation: fadeIn 1s ease-in forwards;
+            animation: fadeIn 0.6s ease-in forwards;
         }
 
         .typing-text-top {
@@ -189,6 +253,12 @@
             margin-bottom: 20px;
         }
 
+        @media (max-width: 600px) {
+            .tree-container {
+                height: 240px;
+            }
+        }
+
         .trunk {
             width: 30px;
             height: 0;
@@ -202,7 +272,7 @@
         }
 
         .trunk.grow {
-            animation: growTrunk 3s ease-out forwards;
+            animation: growTrunk 2s ease-out forwards;
         }
 
         @keyframes growTrunk {
@@ -223,6 +293,29 @@
             transform: translateX(-50%);
             width: 260px;
             height: 210px;
+        }
+
+        @media (max-width: 600px) {
+            .heart-tree {
+                width: 220px;
+                height: 180px;
+                bottom: 70px;
+            }
+
+            .trunk.grow {
+                animation: growTrunkMobile 2s ease-out forwards;
+            }
+
+            @keyframes growTrunkMobile {
+                0% {
+                    height: 0;
+                    width: 25px;
+                }
+                100% {
+                    height: 70px;
+                    width: 25px;
+                }
+            }
         }
 
         .heart {
@@ -252,7 +345,7 @@
         }
 
         .heart.pop {
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards;
         }
 
         @keyframes popIn {
@@ -261,7 +354,7 @@
                 transform: rotate(-45deg) scale(0);
             }
             70% {
-                transform: rotate(-45deg) scale(1.4);
+                transform: rotate(-45deg) scale(1.3);
             }
             100% {
                 opacity: 1;
@@ -270,7 +363,9 @@
         }
 
         .falling-heart {
-            animation: fall 3.5s ease-in forwards, swing 1.8s ease-in-out infinite;
+            animation: fall 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards, 
+                       swing 2s cubic-bezier(0.42, 0, 0.58, 1) infinite,
+                       rotate 3s linear infinite;
             pointer-events: none;
             z-index: 5;
         }
@@ -278,20 +373,29 @@
         @keyframes fall {
             0% {
                 opacity: 1;
-                transform: translateY(0) translateX(0) rotate(-45deg);
+                transform: translateY(0) translateX(0);
             }
             100% {
-                transform: translateY(320px) translateX(-40px) rotate(-45deg);
+                transform: translateY(350px) translateX(-50px);
                 opacity: 0;
             }
         }
 
         @keyframes swing {
             0%, 100% {
-                margin-left: -5px;
+                transform: translateX(-10px);
             }
             50% {
-                margin-left: 30px;
+                transform: translateX(35px);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(-45deg);
+            }
+            100% {
+                transform: rotate(315deg);
             }
         }
 
@@ -304,7 +408,7 @@
         }
 
         .counter.show {
-            animation: fadeIn 1s ease-in forwards;
+            animation: fadeIn 0.6s ease-in forwards;
         }
 
         .counter-time {
@@ -431,24 +535,22 @@
         // Generar posiciones para formar un corazón denso y perfecto
         function generateHeartPositions() {
             const positions = [];
-            const centerX = 130;
-            const centerY = 120;
+            const isMobile = window.innerWidth <= 600;
+            const centerX = isMobile ? 110 : 130;
+            const centerY = isMobile ? 100 : 120;
+            const scale = isMobile ? 4.5 : 5.5;
             
             // Generar corazones en forma de corazón matemático - TRIPLE DENSIDAD
             for (let angle = 0; angle < Math.PI * 2; angle += 0.05) {
-                // Ecuación paramétrica de corazón
                 const t = angle;
                 const x = 16 * Math.pow(Math.sin(t), 3);
                 const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
                 
-                // Escalar y centrar
-                const scale = 5.5;
                 positions.push({
                     x: centerX + x * scale,
                     y: centerY + y * scale
                 });
                 
-                // Agregar mucha más densidad
                 positions.push({
                     x: centerX + x * scale + (Math.random() - 0.5) * 6,
                     y: centerY + y * scale + (Math.random() - 0.5) * 6
@@ -460,13 +562,16 @@
                 });
             }
             
-            // Rellenar COMPLETAMENTE el interior del corazón con grid muy denso
-            for (let y = -75; y < 90; y += 4) {
-                for (let x = -85; x < 85; x += 4) {
+            const gridStep = isMobile ? 4.5 : 4;
+            const rangeY = isMobile ? [-65, 80] : [-75, 90];
+            const rangeX = isMobile ? [-75, 75] : [-85, 85];
+            
+            // Rellenar COMPLETAMENTE el interior del corazón
+            for (let y = rangeY[0]; y < rangeY[1]; y += gridStep) {
+                for (let x = rangeX[0]; x < rangeX[1]; x += gridStep) {
                     const t = Math.atan2(-y, x);
                     const hx = 16 * Math.pow(Math.sin(t), 3);
                     const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                    const scale = 5.5;
                     const dist = Math.sqrt(Math.pow(x - hx * scale, 2) + Math.pow(y - hy * scale, 2));
                     
                     if (dist < 15) {
@@ -475,7 +580,6 @@
                             y: centerY + y
                         });
                         
-                        // Agregar puntos intermedios
                         if (Math.random() > 0.4) {
                             positions.push({
                                 x: centerX + x + (Math.random() - 0.5) * 3,
@@ -486,13 +590,15 @@
                 }
             }
             
-            // Capa adicional para eliminar cualquier espacio blanco
-            for (let y = -70; y < 85; y += 5) {
-                for (let x = -80; x < 80; x += 5) {
+            // Capa adicional para eliminar espacios blancos
+            const extraRangeY = isMobile ? [-60, 75] : [-70, 85];
+            const extraRangeX = isMobile ? [-70, 70] : [-80, 80];
+            
+            for (let y = extraRangeY[0]; y < extraRangeY[1]; y += 5) {
+                for (let x = extraRangeX[0]; x < extraRangeX[1]; x += 5) {
                     const t = Math.atan2(-y, x);
                     const hx = 16 * Math.pow(Math.sin(t), 3);
                     const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                    const scale = 5.5;
                     const dist = Math.sqrt(Math.pow(x - hx * scale, 2) + Math.pow(y - hy * scale, 2));
                     
                     if (dist < 12) {
@@ -535,14 +641,13 @@
                     
                     tree.appendChild(heart);
                     hearts.push({ element: heart, color: color, x: pos.x, y: pos.y });
-                }, 3000 + (index * 3));
+                }, 2000 + (index * 2));
             });
 
-            // Hacer que los corazones caigan - MÁS FRECUENTE
+            // Hacer que los corazones caigan - MÁS FRECUENTE Y FLUIDO
             setTimeout(() => {
                 setInterval(() => {
                     if (hearts.length > 0) {
-                        // Hacer caer 2-3 corazones a la vez
                         const numFalling = Math.floor(Math.random() * 2) + 2;
                         
                         for (let i = 0; i < numFalling; i++) {
@@ -554,6 +659,8 @@
                             fallingHeart.style.left = originalHeart.x + 'px';
                             fallingHeart.style.top = originalHeart.y + 'px';
                             fallingHeart.style.background = originalHeart.color;
+                            // Añadir variación en la duración para más naturalidad
+                            fallingHeart.style.animationDuration = `${2.5 + Math.random() * 1}s, ${1.5 + Math.random() * 1}s, ${2.5 + Math.random() * 1}s`;
                             
                             const styleId = 'falling-' + Date.now() + '-' + Math.random();
                             const style = document.createElement('style');
@@ -575,8 +682,8 @@
                             }, 3500);
                         }
                     }
-                }, 300);
-            }, 8000);
+                }, 200);
+            }, 6000);
         }
 
         // Contador de tiempo
@@ -594,7 +701,7 @@
                 `${days} días ${hours} horas ${minutes} minutos ${seconds} segundos`;
         }
 
-        // Efecto de escritura
+        // Efecto de escritura más rápido
         function typeWriterTop() {
             const text = "Si pudiera elegir un lugar seguro, sería a tu lado.\n\nCuanto más tiempo estoy contigo, más te amo.";
             let index = 0;
@@ -611,17 +718,17 @@
                         element.textContent = currentText + text.charAt(index);
                     }
                     index++;
-                    setTimeout(type, 40);
+                    setTimeout(type, 30);
                 } else {
                     cursor.remove();
                 }
             }
             
             element.appendChild(cursor);
-            setTimeout(type, 500);
+            setTimeout(type, 300);
         }
 
-        // Iniciar todas las animaciones en orden
+        // Iniciar todas las animaciones en orden - TIEMPOS REDUCIDOS
         function startAllAnimations() {
             // 1. Crecer el tronco
             document.getElementById('trunk').classList.add('grow');
@@ -636,14 +743,14 @@
                 document.getElementById('title').classList.add('show');
                 document.getElementById('messageTop').classList.add('show');
                 typeWriterTop();
-            }, 9000);
+            }, 6000);
             
             // 4. Mostrar contador
             setTimeout(() => {
                 document.getElementById('counter').classList.add('show');
                 updateCounter();
                 setInterval(updateCounter, 1000);
-            }, 10000);
+            }, 7000);
         }
 
         // Inicializar
