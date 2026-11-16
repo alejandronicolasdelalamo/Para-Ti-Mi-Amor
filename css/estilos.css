@@ -1,0 +1,423 @@
+/* ==========================================================================
+   Para Ti, Mi Amor
+   La escena (cielo, árbol, corazones) se pinta en el <canvas>; esta hoja
+   coloca la carta y el contador y define la zona que ocupa el árbol.
+   ========================================================================== */
+
+:root {
+  --noche: #12040e;
+  --vino: #581337;
+  --carmin: #c41e3a;
+  --rosa: #e8486a;
+  --rubor: #ffb3c1;
+  --marfil: #fff1e6;
+
+  --titular: 'Bodoni Moda', 'Didot', 'Bodoni MT', 'Times New Roman', serif;
+  --lectura: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+
+  --borde: clamp(20px, 5vw, 72px);
+  --suave: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  background: var(--noche);
+  color: var(--marfil);
+  font-family: var(--lectura);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ escena */
+
+.escena {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ------------------------------------------------------------- composición */
+
+.pagina {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'carta'
+    'arbol'
+    'contador';
+  /* El margen superior deja sitio al botón «Plantar otra vez». */
+  padding: calc(clamp(60px, 9vh, 84px) + env(safe-area-inset-top, 0px)) var(--borde)
+    calc(clamp(14px, 2.6vh, 28px) + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+  pointer-events: none;
+}
+
+.carta {
+  grid-area: carta;
+  min-width: 0;
+}
+
+.arbol-zona {
+  grid-area: arbol;
+  min-width: 0;
+  min-height: 0;
+}
+
+.contador {
+  grid-area: contador;
+  min-width: 0;
+  padding-top: clamp(14px, 2.4vh, 26px);
+}
+
+@media (min-width: 900px) and (min-aspect-ratio: 5 / 4) {
+  .pagina {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    grid-template-rows: 1fr auto auto 1.15fr;
+    grid-template-areas:
+      '.        arbol'
+      'carta    arbol'
+      'contador arbol'
+      '.        arbol';
+    column-gap: clamp(24px, 4vw, 72px);
+    padding-top: clamp(32px, 6vh, 72px);
+    padding-bottom: clamp(64px, 13vh, 128px);
+    padding-left: clamp(40px, 8vw, 140px);
+    text-align: left;
+  }
+
+  .contador {
+    padding-top: clamp(28px, 5vh, 52px);
+  }
+}
+
+/* -------------------------------------------------------------------- carta */
+
+.carta__titulo {
+  font-family: var(--titular);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.9rem, 1.1rem + 3.4vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  text-shadow: 0 2px 28px rgba(18, 4, 14, 0.6);
+  opacity: 0;
+  transform: translateY(0.35em);
+  transition: opacity 1.1s var(--suave), transform 1.1s var(--suave);
+}
+
+.carta__texto {
+  margin-top: clamp(12px, 2.4vh, 26px);
+  font-style: italic;
+  font-size: clamp(1.06rem, 0.9rem + 0.75vw, 1.5rem);
+  line-height: 1.55;
+  text-shadow: 0 1px 18px rgba(18, 4, 14, 0.7);
+}
+
+.carta__texto p + p {
+  margin-top: 0.55em;
+}
+
+.palabra {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Cada letra aparece con el retardo que le marca su posición (--i). */
+.letra {
+  opacity: 0;
+  filter: blur(5px);
+  transition: opacity 0.5s ease-out, filter 0.5s ease-out;
+  transition-delay: calc(var(--i) * 30ms + 500ms);
+}
+
+.carta.visible .carta__titulo {
+  opacity: 1;
+  transform: none;
+}
+
+.carta.visible .letra {
+  opacity: 1;
+  filter: none;
+}
+
+/* ----------------------------------------------------------------- contador */
+
+.contador__intro {
+  font-style: italic;
+  font-size: clamp(0.98rem, 0.9rem + 0.35vw, 1.2rem);
+  color: var(--rubor);
+}
+
+.contador__cifras {
+  display: inline-grid;
+  grid-template-columns: repeat(4, auto);
+  column-gap: clamp(16px, 4.2vw, 44px);
+  margin-top: clamp(6px, 1.2vh, 14px);
+}
+
+.cifra {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 2.1ch;
+}
+
+.cifra__valor {
+  font-family: var(--titular);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 1.2rem + 3vw, 3.5rem);
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.cifra__valor.cambia {
+  animation: tic 0.45s var(--suave);
+}
+
+.cifra__unidad {
+  margin-top: 0.35em;
+  font-size: clamp(0.82rem, 0.78rem + 0.2vw, 0.98rem);
+  color: var(--rubor);
+}
+
+@keyframes tic {
+  from {
+    opacity: 0.25;
+    transform: translateY(-0.22em);
+  }
+}
+
+.contador__intro,
+.cifra {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.9s var(--suave), transform 0.9s var(--suave);
+}
+
+.contador.visible .contador__intro,
+.contador.visible .cifra {
+  opacity: 1;
+  transform: none;
+}
+
+.contador.visible .cifra:nth-child(1) { transition-delay: 0.15s; }
+.contador.visible .cifra:nth-child(2) { transition-delay: 0.27s; }
+.contador.visible .cifra:nth-child(3) { transition-delay: 0.39s; }
+.contador.visible .cifra:nth-child(4) { transition-delay: 0.51s; }
+
+/* ---------------------------------------------------------- pantalla inicial */
+
+.inicio {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--borde);
+  transition: opacity 0.7s ease, visibility 0.7s;
+}
+
+.inicio.fuera {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.semilla {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 36px;
+  border: 0;
+  border-radius: 28px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.semilla:focus-visible,
+.repetir:focus-visible {
+  outline: 2px solid var(--marfil);
+  outline-offset: 4px;
+}
+
+.semilla__corazon {
+  position: relative;
+  width: clamp(84px, 16vmin, 124px);
+  aspect-ratio: 1;
+  animation: latido 1.5s ease-in-out infinite;
+  transition: transform 0.35s var(--suave), opacity 0.25s ease;
+}
+
+.semilla__corazon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 34px rgba(232, 72, 106, 0.6));
+}
+
+/* Anillo que se expande con cada latido e invita a tocar. */
+.semilla__corazon::after {
+  content: '';
+  position: absolute;
+  inset: -6%;
+  border: 1px solid rgba(255, 179, 193, 0.7);
+  border-radius: 50%;
+  animation: anillo 1.5s ease-out infinite;
+}
+
+.semilla:hover .semilla__corazon {
+  transform: scale(1.08);
+}
+
+.inicio.fuera .semilla__corazon {
+  opacity: 0;
+}
+
+.semilla__titulo {
+  margin-top: clamp(18px, 3.4vh, 34px);
+  font-family: var(--titular);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(2.6rem, 1.6rem + 6vw, 5.6rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  text-shadow: 0 2px 30px rgba(18, 4, 14, 0.6);
+}
+
+.semilla__pista {
+  margin-top: clamp(12px, 2vh, 20px);
+  font-style: italic;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.2rem);
+  color: var(--rubor);
+}
+
+@keyframes latido {
+  0%, 36%, 100% { scale: 1; }
+  8% { scale: 1.13; }
+  18% { scale: 1.01; }
+  27% { scale: 1.08; }
+}
+
+@keyframes anillo {
+  0% { transform: scale(0.8); opacity: 0; }
+  12% { opacity: 0.8; }
+  100% { transform: scale(1.65); opacity: 0; }
+}
+
+/* ------------------------------------------------------------------ repetir */
+
+.repetir {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  padding: 9px 16px;
+  border: 1px solid rgba(255, 241, 230, 0.35);
+  border-radius: 999px;
+  background: rgba(18, 4, 14, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--marfil);
+  font: italic 0.95rem var(--lectura);
+  cursor: pointer;
+  animation: asomar 0.8s var(--suave) backwards;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.repetir:hover {
+  background: rgba(88, 19, 55, 0.7);
+  border-color: rgba(255, 241, 230, 0.7);
+}
+
+@keyframes asomar {
+  from { opacity: 0; transform: translateY(-8px); }
+}
+
+/* ----------------------------------------------------------- sin JavaScript */
+
+.sin-js {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.6em;
+  padding: var(--borde);
+  background: linear-gradient(#12040e, #581337);
+  text-align: center;
+  font-style: italic;
+  font-size: 1.2rem;
+}
+
+.sin-js h1 {
+  font-family: var(--titular);
+  font-weight: 500;
+  font-size: 2.2rem;
+}
+
+/* ------------------------------------------------------- pantallas muy bajas */
+
+@media (max-height: 520px) {
+  .carta__titulo { font-size: 1.5rem; }
+  .carta__texto { margin-top: 6px; font-size: 0.98rem; line-height: 1.35; }
+  .cifra__valor { font-size: 1.5rem; }
+  .contador { padding-top: 8px; }
+}
+
+/* ------------------------------------------------------- movimiento reducido */
+
+@media (prefers-reduced-motion: reduce) {
+  .semilla__corazon,
+  .semilla__corazon::after,
+  .cifra__valor.cambia,
+  .repetir {
+    animation: none;
+  }
+
+  .semilla__corazon::after {
+    opacity: 0;
+  }
+
+  .carta__titulo,
+  .letra,
+  .contador__intro,
+  .cifra,
+  .inicio {
+    transition-duration: 0.01s;
+    transition-delay: 0s !important;
+    transform: none;
+    filter: none;
+  }
+}
